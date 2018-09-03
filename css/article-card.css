@@ -1,0 +1,92 @@
+.box--article {
+    background: white;
+    box-shadow: 4px 3px 11px #e4e4e4;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    color: black;
+    border: 1px solid #f1f1f1;
+}
+.box--article .box__logo {
+    padding: 2em 1em;
+}
+.box--article .box__logo img {
+    max-width: 40%;
+}
+.box--article .box__body {
+    padding: 1em;
+    padding-top: 0;
+}
+.box--article .box__body h3 {
+    margin-top: 0;
+    font-size: 1.7em;
+    font-weight: normal;
+}
+
+.box--article .box__body-description {
+    font-size: 1em;
+}
+
+.box--article .box__body-subtitle {
+    font-size: 1.25em;
+}
+.box__footer {
+    padding: 1em;
+    background: #f4f4f4;
+    display: flex;
+    align-items: center;
+}
+
+.box__footer > div {
+    flex: 1;
+}
+
+.box__footer > div:last-child {
+    text-align: right;
+    font-size: 1em;
+}
+
+.box__footer div button {
+    padding: 1em;
+    display: block;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: bold;
+    background: none;
+    border: 0;
+    font-size: 1em;
+    box-shadow: none;
+    font-weight: normal;
+    color: #0e79a5;
+}
+.article-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1em;
+    justify-content: center;
+}
+.article-grid__item {
+    flex: 1 0 auto;
+    flex-wrap: wrap;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    max-width: 47%;
+}
+
+.article-grid__item:nth-child(2n) {
+    margin-right: 0;
+}
+
+.box--article:hover .box__footer button {
+    background: #ececec;
+}
+
+@media (max-width: 660px) {
+    .article-grid {
+        padding: 1em;
+    }
+    .article-grid__item {
+        max-width: 100%;
+        margin-right: 0;
+    }
+}
