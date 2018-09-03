@@ -114,16 +114,14 @@ if(isset($_GET['article'])) {
 	font-weight: bold;
 }
 </style>
-<h1><?php if(isset($article)) {
-    echo "Update";
-} else echo "Create";?> Article</h1>
+<h1><?php echo (isset($article)) ? "Update" : "Create"; ?> Article</h1>
 <div class="container">
 	<div class="box">
 		<h2>Article Details</h2>
 		<form action="/wp-admin/admin-post.php" method="post">
 			<input type="hidden" name="action" value="custom_action_hook"/>
 			<input type="hidden" name="custom_nonce" value=""/>
-			<input type="hidden" name="edit" value="1"/>
+			<input type="hidden" name="edit" value="<?php echo (isset($article)) ? 1 : 0; ?>"/>
 			<input type="hidden" name="article" value="<?php echo get_article_field($article, 'id'); ?>"/>
 
 			<div>
@@ -146,7 +144,7 @@ if(isset($_GET['article'])) {
 				<label>* Logo URL</label>
 				<input class="js-article-logo" name="logo" type="text" value="<?php echo get_article_field($article, 'logo'); ?>"placeholder="https://cdn.example.com/images/image.jpg" required/>
 			</div>
-			<input class="button button-primary button-large" type="submit" name="submit" value="Create Article"/>
+			<input class="button button-primary button-large" type="submit" name="submit" value="<?php echo (isset($article)) ? "Update" : "Create"; ?> Article"/>
 		</form>
 	</div>
 	<div>

@@ -92,6 +92,11 @@
     text-align: right;
 }
 
+.modal__footer form {
+    display: inline;
+    margin-right: .5em;
+}
+
 #wpbody {
     position: unset;
 }

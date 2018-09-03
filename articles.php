@@ -195,9 +195,16 @@ function articles_shortcode($atts, $content = null)
 		$subtitle = get_article_field($myrows[$i], 'subtitle');
 		$description = get_article_field($myrows[$i], 'description');
 		$url = get_article_field($myrows[$i], 'url');
+		$active = "";
+
+		if($i <= 6) {
+			$active = "active";
+		}
+
+
 
 		$html .= "
-		<div class=\"article-grid__item\">
+		<div class=\"article-grid__item ${active}\">
 			<a href=\"${url}\" target=\"_blank\" class=\"box--article\">
 				<div class=\"box__logo\">
 					<img src=\"${logo}\"/>
@@ -224,7 +231,33 @@ function articles_shortcode($atts, $content = null)
 		$html .= "<div class=\"article-grid__item\"></div>";
 	}
 
-	$html .= "</div></div>";
+	$html .= "</div>
+	<div class=\"article-paginator\">
+    		<div class=\"article-paginator__item active\">1</div>
+			<div class=\"article-paginator__item\">2</div>
+	</div>
+	</div>
+	
+	<script>
+	var currentPage = 0;
+
+	jQuery('.article-paginator__item').click(function(e) {
+		e.preventDefault();
+		var item = jQuery(this),
+			page = item.text(),
+			start = 6 * (jQuery(this).text() - 1),
+			end   = start + 6,
+			makeActive = jQuery(jQuery('.article-grid__item').splice(start, end));
+
+		jQuery('.article-grid__item').removeClass('active');
+		makeActive.addClass('active');
+
+		jQuery('.article-paginator__item').removeClass('active');
+		item.addClass('active');
+	});
+	
+	</script>
+	";
 
 	echo $html;
 }
