@@ -133,8 +133,8 @@ if(isset($_GET['article'])) {
                 <input class="js-article-title" name="title" type="text" value="<?php echo get_article_field($article, 'title'); ?>" class="input-article-title" placeholder="The news article title" required/>
 			</div>
 			<div>
-				<label>* Article sub title</label>
-				<input class="js-article-subtitle" name="subtitle" type="text" value="<?php echo get_article_field($article, 'subtitle'); ?>" placeholder="The news article sub title" required/>
+				<label>Article sub title</label>
+				<input class="js-article-subtitle" name="subtitle" type="text" value="<?php echo get_article_field($article, 'subtitle'); ?>" placeholder="The news article sub title"/>
 			</div>
 			<div>
 				<label>* Article description</label>

@@ -118,8 +118,8 @@
 		<a class="button button-primary button-large" href="/wp-admin/admin.php?page=my-custom-submenu-page">Create Article</a>
 	</div>
 <?php
-	for ($i = 1; $i < $amountOfRows; $i++) {
-    $row = $myrows[$i];
+	for ($i = 1; $i <= $amountOfRows; $i++) {
+    $row = $myrows[$i - 1];
 ?>
 	<div class="list__item">
 		<div class="list__item-logo">
