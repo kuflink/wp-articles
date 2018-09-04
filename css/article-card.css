@@ -167,6 +167,7 @@
 
 .card__body {
     padding: 1em;
+    height: 6em;
 }
 
 .card__body > *:last-child {
