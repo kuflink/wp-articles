@@ -17,6 +17,15 @@ register_activation_hook( __FILE__, 'jal_install' );
 //register_activation_hook( __FILE__, 'jal_install_data' );
 add_action('admin_post_custom_action_hook', 'the_action_hook_callback');
 
+register_deactivation_hook( __FILE__, 'my_plugin_remove_database' );
+
+function my_plugin_remove_database() {
+     global $wpdb;
+     $table_name = $wpdb->prefix . 'articles';
+     $sql = "DROP TABLE IF EXISTS $table_name";
+     $wpdb->query($sql);
+}   
+
 function the_action_hook_callback() {
 	$delete = $_POST["delete"];
 
