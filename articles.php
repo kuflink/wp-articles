@@ -276,7 +276,7 @@ function articles_shortcode($atts, $content = null)
 
 	$html .= "</div>";
 
-	echo $html;
+	return $html;
 }
 
 add_shortcode('articles', 'articles_shortcode');
