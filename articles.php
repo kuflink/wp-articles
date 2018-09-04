@@ -200,9 +200,9 @@ function articles_shortcode($atts, $content = null)
 	for ($i = 1; $i <= $amountOfRows; $i++) {
 		$row = $myrows[$i - 1];
 		$logo = get_article_field($row, 'logo');
-		$title = get_article_field($row, 'title');
+		$title = wp_html_excerpt( get_article_field($row, 'title'), 81, "...");
 		$subtitle = get_article_field($row, 'subtitle');
-		$description = get_article_field($row, 'description');
+		$description = wp_html_excerpt(get_article_field($row, 'description'), 142, "...");
 		$url = get_article_field($row, 'url');
 		$active = "";
 

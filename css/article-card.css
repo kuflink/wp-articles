@@ -146,6 +146,7 @@
 
 .card__title {
     padding: 1em;
+    height: 6.5em;
 }
 
 .card__actions-button {
