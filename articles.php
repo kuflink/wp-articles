@@ -104,11 +104,11 @@ function jal_install() {
 	$sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-		logo varchar(255) NOT NULL,
+		logo varchar(500) NOT NULL,
 		title varchar(255) NOT NULL,
 		subtitle varchar(255) NOT NULL,
-		description varchar(255) NOT NULL,
-		url varchar(55) NOT NULL,
+		description varchar(500) NOT NULL,
+		url varchar(500) NOT NULL,
 		PRIMARY KEY (id)
 	) $charset_collate;";
 
@@ -205,9 +205,9 @@ function articles_shortcode($atts, $content = null)
 		<div class=\"article-grid__item ${active}\">
 			<a href=\"${url}\" target=\"_blank\" class=\"card--article\">
 				<div class=\"card__title\">
-					<h3>${title}</h3>
-					<p>${subtitle}</p>
-				</div>
+					<h3>${title}</h3><p>date goes here</p>";
+					//<p>${subtitle}</p>
+		$html .= "</div>
 				<div class=\"card__media\">
 					<img src=\"${logo}\">
 				</div>

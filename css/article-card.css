@@ -152,6 +152,7 @@
     color: #158dc1;
     padding: 1em;
     display: inline-block;
+    flex: 1;
 }
 
 .card__title p, .card__body > * {
@@ -188,4 +189,13 @@
 
 .card__media > * {
     max-width: 100%;
+}
+
+.card__actions {
+    display: flex;
+    align-items: center;
+}
+
+.card__actions-icon {
+    padding: 1em;
 }
