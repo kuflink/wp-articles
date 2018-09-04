@@ -137,6 +137,7 @@
     display: block;
     text-decoration: none;
     color: #000;
+    text-align: left;
 }
 
 .card__title > * {
