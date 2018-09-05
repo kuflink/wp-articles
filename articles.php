@@ -186,7 +186,7 @@ function articles_shortcode($atts, $content = null)
 {
 	global $wpdb;
 
-	$myrows = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}articles" );
+	$myrows = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}articles ORDER BY id DESC" );
 	  $amountOfRows = count($myrows);
 	  
 	$containerClass = "";
@@ -204,9 +204,10 @@ function articles_shortcode($atts, $content = null)
 		$subtitle = get_article_field($row, 'subtitle');
 		$description = wp_html_excerpt(get_article_field($row, 'description'), 142, "...");
 		$url = get_article_field($row, 'url');
+		$time = date('M Y', strtotime(get_article_field($row, 'time')));
 		$active = "";
 
-		if($i <= 6) {
+		if($i <= 9) {
 			$active = "active";
 		}
 
@@ -214,7 +215,7 @@ function articles_shortcode($atts, $content = null)
 		<div class=\"article-grid__item ${active}\">
 			<a href=\"${url}\" target=\"_blank\" class=\"card--article\">
 				<div class=\"card__title\">
-					<h3>${title}</h3><p>date goes here</p>";
+					<h3>${title}</h3><p>${time}</p>";
 					//<p>${subtitle}</p>
 		$html .= "</div>
 				<div class=\"card__media\">
@@ -257,8 +258,8 @@ function articles_shortcode($atts, $content = null)
 			e.preventDefault();
 			var item = jQuery(this),
 				page = item.text(),
-				start = 6 * (jQuery(this).text() - 1),
-				end   = start + 6,
+				start = 9 * (jQuery(this).text() - 1),
+				end   = start + 9,
 				makeActive = jQuery(jQuery('.article-grid__item').splice(start, end));
 
 			console.log(start, end, makeActive);
