@@ -141,8 +141,12 @@ if(isset($_GET['article'])) {
 				<textarea class="js-article-description" name="description" required><?php echo get_article_field($article, 'description'); ?></textarea>
 			</div>
 			<div>
-				<label>* Logo URL</label>
-				<input class="js-article-logo" name="logo" type="text" value="<?php echo get_article_field($article, 'logo'); ?>"placeholder="https://cdn.example.com/images/image.jpg" required/>
+				<label>* Image Background Color</label>
+				<input type="color" name="background" value="<?php echo get_article_field($article, 'background'); ?>" />
+			</div>
+			<div>
+				<label>* Image URL</label>
+				<input class="js-article-logo" name="logo" type="text" value="<?php echo get_article_field($article, 'logo'); ?>" placeholder="https://cdn.example.com/images/image.jpg" required/>
 			</div>
 			<input class="button button-primary button-large" type="submit" name="submit" value="<?php echo (isset($article)) ? "Update" : "Create"; ?> Article"/>
 		</form>

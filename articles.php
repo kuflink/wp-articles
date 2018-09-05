@@ -51,6 +51,7 @@ function the_action_hook_callback() {
 	$title = $_POST["title"];
 	$subtitle = $_POST["subtitle"];
 	$description = $_POST["description"];
+	$backgroundColor = $_POST["background"];
 	$logo = $_POST["logo"];
 
 	if(
@@ -71,6 +72,7 @@ function the_action_hook_callback() {
 			'title' => $title,
 			'subtitle' => $subtitle,
 			'description' => $description,
+			'background' => $backgroundColor,
 			'url' => $url
 		);
 
@@ -118,6 +120,7 @@ function jal_install() {
 		subtitle varchar(255) NOT NULL,
 		description varchar(500) NOT NULL,
 		url varchar(500) NOT NULL,
+		background varchar(7) default '#eeeeee',
 		PRIMARY KEY (id)
 	) $charset_collate;";
 
@@ -204,7 +207,8 @@ function articles_shortcode($atts, $content = null)
 		$subtitle = get_article_field($row, 'subtitle');
 		$description = wp_html_excerpt(get_article_field($row, 'description'), 142, "...");
 		$url = get_article_field($row, 'url');
-		$time = date('M Y', strtotime(get_article_field($row, 'time')));
+		$backgroundColor = get_article_field($row, 'background');
+		$time = date('F Y', strtotime(get_article_field($row, 'time')));
 		$active = "";
 
 		if($i <= 9) {
@@ -215,10 +219,16 @@ function articles_shortcode($atts, $content = null)
 		<div class=\"article-grid__item ${active}\">
 			<a href=\"${url}\" target=\"_blank\" class=\"card--article\">
 				<div class=\"card__title\">
-					<h3>${title}</h3><p>${time}</p>";
-					//<p>${subtitle}</p>
+					<h3>${title}</h3>";
+		
+		if($subtitle === '') {
+			$html .= "<p>${time}</p>";
+		} else {
+			$html .= "<p>${subtitle}</p>";
+		}
+
 		$html .= "</div>
-				<div class=\"card__media\">
+				<div class=\"card__media\" style=\"background: ${backgroundColor}\">
 					<img src=\"${logo}\">
 				</div>
 				<div class=\"card__body\">
