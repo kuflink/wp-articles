@@ -203,7 +203,7 @@ function articles_shortcode($atts, $content = null)
 	for ($i = 1; $i <= $amountOfRows; $i++) {
 		$row = $myrows[$i - 1];
 		$logo = get_article_field($row, 'logo');
-		$title = wp_html_excerpt( get_article_field($row, 'title'), 81, "...");
+		$title = wp_html_excerpt( get_article_field($row, 'title'), 76, "...");
 		$subtitle = get_article_field($row, 'subtitle');
 		$description = wp_html_excerpt(get_article_field($row, 'description'), 142, "...");
 		$url = get_article_field($row, 'url');
@@ -249,8 +249,8 @@ function articles_shortcode($atts, $content = null)
 	}
 	$html .= "</div>";
 
-	if($amountOfRows > 6) {
-		$amountOfPages = ceil($amountOfRows / 6);
+	if($amountOfRows > 9) {
+		$amountOfPages = ceil($amountOfRows / 9);
 		$html .= "<div class=\"article-paginator\">";
 
 		for ($i = 1; $i <= $amountOfPages; $i++) {
