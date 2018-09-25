@@ -50,6 +50,7 @@ function the_action_hook_callback() {
 	$url = $_POST["url"];
 	$title = $_POST["title"];
 	$subtitle = $_POST["subtitle"];
+	$custom_date = $_POST["custom_date"];
 	$description = $_POST["description"];
 	$backgroundColor = $_POST["background"];
 	$logo = $_POST["logo"];
@@ -58,13 +59,17 @@ function the_action_hook_callback() {
 		isset($url) &&
 		isset($title) &&
 		isset($description) &&
-		isset($logo)
+		isset($logo) 
 	) {
 		global $wpdb;
 		
 		$table_name = $wpdb->prefix . 'articles';
 
 		$edit = $_POST["edit"];
+
+		if($custom_date === '0000-00-00 00:00:00') {
+			$custom_date = NULL;
+		}
 
 		$data = array( 
 			'time' => current_time( 'mysql' ), 
@@ -73,6 +78,7 @@ function the_action_hook_callback() {
 			'subtitle' => $subtitle,
 			'description' => $description,
 			'background' => $backgroundColor,
+			'custom_date' => $custom_date,
 			'url' => $url
 		);
 
@@ -114,7 +120,8 @@ function jal_install() {
 
 	$sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		time timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		custom_date timestamp DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		logo varchar(500) NOT NULL,
 		title varchar(255) NOT NULL,
 		subtitle varchar(255) NOT NULL,
@@ -175,21 +182,24 @@ function get_article_field( $article, $field ) {
 	return "";
   }
 
-function get_article_card_style() {
-	wp_register_style( 'article-style', plugins_url( '/css/article-card.css', __FILE__ ), array(), '1.0.0', 'all' );
+function my_custom_admin_head() {
+    wp_register_style( 'namespace', plugins_url( '/css/article-card.css', __FILE__ ));
+    wp_enqueue_style( 'namespace' );
 }
 
-add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
 function callback_for_setting_up_scripts() {
     wp_register_style( 'namespace', plugins_url( '/css/article-card.css', __FILE__ ));
     wp_enqueue_style( 'namespace' );
 }
 
+add_action( 'admin_head', 'my_custom_admin_head' );
+add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
+
 function articles_shortcode($atts, $content = null) 
 {
 	global $wpdb;
 
-	$myrows = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}articles ORDER BY id DESC" );
+	$myrows = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}articles ORDER BY custom_date, id DESC" );
 	  $amountOfRows = count($myrows);
 	  
 	$containerClass = "";
@@ -207,6 +217,7 @@ function articles_shortcode($atts, $content = null)
 		$subtitle = get_article_field($row, 'subtitle');
 		$description = wp_html_excerpt(get_article_field($row, 'description'), 142, "...");
 		$url = get_article_field($row, 'url');
+		$custom_date = get_article_field($row, 'custom_date');
 		$backgroundColor = get_article_field($row, 'background');
 		$time = date('F Y', strtotime(get_article_field($row, 'time')));
 		$active = "";
@@ -220,11 +231,16 @@ function articles_shortcode($atts, $content = null)
 			<a href=\"${url}\" target=\"_blank\" class=\"card--article\">
 				<div class=\"card__title\">
 					<h3>${title}</h3>";
-		
-		if($subtitle === '') {
-			$html .= "<p>${time}</p>";
+
+		if($custom_date && $custom_date !== '0000-00-00 00:00:00') {
+			$custom_date = date('F Y', strtotime($custom_date));
+			$html .= "<p>${custom_date}</p>";
 		} else {
-			$html .= "<p>${subtitle}</p>";
+			if($subtitle === '') {
+				$html .= "<p>${time}</p>";
+			} else {
+				$html .= "<p>${subtitle}</p>";
+			}
 		}
 
 		$html .= "</div>

@@ -26,7 +26,7 @@ if(isset($_GET['article'])) {
 	display: flex;
 	align-items: flex-start;
 }
-.container > div {
+.container > div:first-child {
     flex: 1;
 }
 .container > .box:first-child {
@@ -42,7 +42,7 @@ if(isset($_GET['article'])) {
 	font-weight: bold;
 	margin-bottom: 0.5em;
 }
-.box input[type=text], .box input[type=url], .box textarea {
+.box input[type=text], .box input[type=url], .box input[type=date], .box textarea {
 	width: 100%;
 	padding: 0.7em;
 	font-size: 1.2em;
@@ -137,6 +137,10 @@ if(isset($_GET['article'])) {
 				<input class="js-article-subtitle" name="subtitle" type="text" value="<?php echo get_article_field($article, 'subtitle'); ?>" placeholder="The news article sub title"/>
 			</div>
 			<div>
+				<label>Custom Date</label>
+				<input class="js-article-custom-date" name="custom_date" type="date" value="<?php echo get_article_field($article, 'custom_date'); ?>"/>
+			</div>
+			<div>
 				<label>* Article description</label>
 				<textarea class="js-article-description" name="description" required><?php echo get_article_field($article, 'description'); ?></textarea>
 			</div>
@@ -151,26 +155,51 @@ if(isset($_GET['article'])) {
 			<input class="button button-primary button-large" type="submit" name="submit" value="<?php echo (isset($article)) ? "Update" : "Create"; ?> Article"/>
 		</form>
 	</div>
-	<div>
+	<div style="width: 26em;">
 		<h2 style="margin-top: 0;">Article Preview</h2>
-		<div class="box--article">
-			<div class="box__logo">
-				<img class="js-changeable-logo" src="<?php echo get_article_field($article, 'logo'); ?>"/>
-			</div>
-			<div class="box__body">
-				<h3 class="js-changeable-title"><?php echo get_article_field($article, 'title'); ?></h3>
-				<p class="js-changeable-subtitle box__body-subtitle"><?php echo get_article_field($article, 'subtitle'); ?></p>
-                <p class="js-changeable-description box__body-description"><?php echo get_article_field($article, 'description'); ?></p>  
-			</div>
-			<div class="box__footer">
-				<div>
-					<a href="#">Read Article</a>
+
+<?php
+	$html = "";
+	$logo = get_article_field($article, 'logo');
+	$title = wp_html_excerpt( get_article_field($article, 'title'), 76, "...");
+	$subtitle = get_article_field($article, 'subtitle');
+	$description = wp_html_excerpt(get_article_field($article, 'description'), 142, "...");
+	$url = get_article_field($article, 'url');
+	$backgroundColor = get_article_field($article, 'background');
+	$time = date('F Y', strtotime(get_article_field($article, 'time')));
+	$custom_date = get_article_field($article, 'custom_date');
+	$sub = $time;
+
+	$html .= "
+		<div href=\"${url}\" target=\"_blank\" class=\"card--article\">
+			<div class=\"card__title\">
+				<h3 class=\"js-changeable-title\">${title}</h3>";
+		
+		if($subtitle !== '') $sub = $subtitle;
+
+		$html .= "<p class=\"js-changeable-subtitle\">${sub}</p>";
+
+		$html .= "</div>
+				<div class=\"card__media\" style=\"background: ${backgroundColor}\">
+					<img class=\"js-changeable-logo\" src=\"${logo}\">
 				</div>
-				<div>
-					<span>28/08/2018</span>
+				<div class=\"card__body\">
+					<p class=\"js-changeable-description\">${description}</p>
+				</div>
+				<div class=\"card__actions\">
+					<div class=\"card__actions-button\">Read Article</div>
+					<!-- <div class=\"card__actions-icon\">
+						<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\">
+							<path d=\"M0 0h24v24H0z\" fill=\"none\"/>
+							<path d=\"M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z\"/>
+						</svg>
+					</div>-->
 				</div>
 			</div>
-		</div>
+		";
+
+		echo $html;
+?>
 		<p>NOTE: font will be different based on your theme</p>
 	</div>
 
@@ -191,5 +220,9 @@ jQuery(".js-article-description").on('input', function() {
 
 jQuery(".js-article-logo").on('input', function() {
 	jQuery(".js-changeable-logo").attr('src', jQuery(this).val());
+});
+
+jQuery(".js-article-custom-date").on('input', function() {
+	console.log(jQuery(this).val());
 });
 </script>
