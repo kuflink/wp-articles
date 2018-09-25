@@ -138,7 +138,7 @@ if(isset($_GET['article'])) {
 			</div>
 			<div>
 				<label>Custom Date</label>
-				<input class="js-article-custom-date" name="custom_date" type="date" value="<?php echo get_article_field($article, 'custom_date'); ?>"/>
+				<input class="js-article-custom-date" name="custom_date" type="date" value="<?php echo date("Y-m-d", strtotime(get_article_field($article, 'custom_date'))); ?>"/>
 			</div>
 			<div>
 				<label>* Article description</label>
