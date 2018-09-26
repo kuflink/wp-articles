@@ -17,6 +17,15 @@ if(isset($_GET['article'])) {
     $article = null;
 }
 
+$logo = get_article_field($article, 'logo');
+$title = wp_html_excerpt( get_article_field($article, 'title'), 76, "...");
+$subtitle = get_article_field($article, 'subtitle');
+$description = wp_html_excerpt(get_article_field($article, 'description'), 142, "...");
+$url = get_article_field($article, 'url');
+$custom_date = get_article_field($article, 'custom_date');
+$background = get_article_field($article, 'background');
+$time = date('F Y', strtotime(get_article_field($article, 'time')));
+
 ?>
 
 <style>
@@ -41,6 +50,11 @@ if(isset($_GET['article'])) {
 	display: block;
 	font-weight: bold;
 	margin-bottom: 0.5em;
+}
+.box b {
+	margin-bottom: .5em;
+	display: block;
+	color: darkgrey; 
 }
 .box input[type=text], .box input[type=url], .box input[type=date], .box textarea {
 	width: 100%;
@@ -126,31 +140,36 @@ if(isset($_GET['article'])) {
 
 			<div>
 				<label>* Article URL</label>
-				<input class="js-article-url" name="url" type="url" value="<?php echo get_article_field($article, 'url'); ?>" placeholder="https://google.com" required/>
+				<input class="js-article-url" name="url" type="url" value="<?php echo $url ?>" placeholder="https://google.com" required/>
+				<b>Word count: <span class="js-current-length"><?php echo strlen($url); ?></span>/<span class="js-field-length">500</span></b>
 			</div>
 			<div>
 				<label>* Article title</label>
-                <input class="js-article-title" name="title" type="text" value="<?php echo get_article_field($article, 'title'); ?>" class="input-article-title" placeholder="The news article title" required/>
+                <input class="js-article-title" name="title" type="text" value="<?php echo $title; ?>" class="input-article-title" placeholder="The news article title" required/>
+				<b>Word count: <span class="js-current-length"><?php echo strlen($title); ?></span>/<span class="js-field-length">255</span></b>
 			</div>
 			<div>
 				<label>Article sub title</label>
-				<input class="js-article-subtitle" name="subtitle" type="text" value="<?php echo get_article_field($article, 'subtitle'); ?>" placeholder="The news article sub title"/>
+				<input class="js-article-subtitle" name="subtitle" type="text" value="<?php echo $subtitle; ?>" placeholder="The news article sub title"/>
+				<b>Word count: <span class="js-current-length"><?php echo strlen($subtitle); ?></span>/<span class="js-field-length">255</span></b>
 			</div>
 			<div>
 				<label>Custom Date</label>
-				<input class="js-article-custom-date" name="custom_date" type="date" value="<?php echo date("Y-m-d", strtotime(get_article_field($article, 'custom_date'))); ?>"/>
+				<input class="js-article-custom-date" name="custom_date" type="date" value="<?php echo date("Y-m-d", strtotime($custom_date)); ?>"/>
 			</div>
 			<div>
 				<label>* Article description</label>
-				<textarea class="js-article-description" name="description" required><?php echo get_article_field($article, 'description'); ?></textarea>
+				<textarea class="js-article-description" name="description" required><?php echo $description; ?></textarea>
+				<b>Word count: <span class="js-current-length"><?php echo strlen($description); ?></span>/<span class="js-field-length">500</span></b>
 			</div>
 			<div>
 				<label>* Image Background Color</label>
-				<input type="color" name="background" value="<?php echo get_article_field($article, 'background'); ?>" />
+				<input type="color" name="background" value="<?php echo $background; ?>" />
 			</div>
 			<div>
 				<label>* Image URL</label>
-				<input class="js-article-logo" name="logo" type="text" value="<?php echo get_article_field($article, 'logo'); ?>" placeholder="https://cdn.example.com/images/image.jpg" required/>
+				<input class="js-article-logo" name="logo" type="text" value="<?php echo $logo; ?>" placeholder="https://cdn.example.com/images/image.jpg" required/>
+				<b>Word count: <span class="js-current-length"><?php echo strlen($logo); ?></span>/<span class="js-field-length">500</span></b>
 			</div>
 			<input class="button button-primary button-large" type="submit" name="submit" value="<?php echo (isset($article)) ? "Update" : "Create"; ?> Article"/>
 		</form>
@@ -206,20 +225,87 @@ if(isset($_GET['article'])) {
 </div>
 <p>Plugin created by Michael Wilson @ Kuflink 2018</p>
 <script>
+jQuery(".js-article-url").on('input', function() {
+	var input = jQuery(this),
+		wordCount = input.next(),
+		inputLength = input.val().length,
+		maxLength = parseInt(wordCount.find(".js-field-length").text());	
+
+	if(inputLength > maxLength) {
+		wordCount.css({
+			color: "red"
+		});
+	}
+
+	wordCount.find(".js-current-length").text(inputLength);
+});
+
 jQuery(".js-article-title").on('input', function() {
 	jQuery(".js-changeable-title").text(jQuery(this).val());
+
+	var input = jQuery(this),
+		wordCount = input.next(),
+		inputLength = input.val().length,
+		maxLength = parseInt(wordCount.find(".js-field-length").text());	
+
+	if(inputLength > maxLength) {
+		wordCount.css({
+			color: "red"
+		});
+	}
+
+	wordCount.find(".js-current-length").text(inputLength);
 });
 
 jQuery(".js-article-subtitle").on('input', function() {
 	jQuery(".js-changeable-subtitle").text(jQuery(this).val());
+
+	var input = jQuery(this),
+		wordCount = input.next(),
+		inputLength = input.val().length,
+		maxLength = parseInt(wordCount.find(".js-field-length").text());	
+
+	if(inputLength > maxLength) {
+		wordCount.css({
+			color: "red"
+		});
+	}
+
+	wordCount.find(".js-current-length").text(inputLength);
 });
 
 jQuery(".js-article-description").on('input', function() {
 	jQuery(".js-changeable-description").text(jQuery(this).val());
+
+	var input = jQuery(this),
+		wordCount = input.next(),
+		inputLength = input.val().length,
+		maxLength = parseInt(wordCount.find(".js-field-length").text());	
+
+	if(inputLength > maxLength) {
+		wordCount.css({
+			color: "red"
+		});
+	}
+
+	wordCount.find(".js-current-length").text(inputLength);
 });
 
 jQuery(".js-article-logo").on('input', function() {
 	jQuery(".js-changeable-logo").attr('src', jQuery(this).val());
+
+	var input = jQuery(this),
+		wordCount = input.next(),
+		inputLength = input.val().length,
+		maxLength = parseInt(wordCount.find(".js-field-length").text());	
+
+	if(inputLength > maxLength) {
+		wordCount.css({
+			color: "red"
+		});
+	}
+
+	wordCount.find(".js-current-length").text(inputLength);
 });
 
 jQuery(".js-article-custom-date").on('input', function() {
